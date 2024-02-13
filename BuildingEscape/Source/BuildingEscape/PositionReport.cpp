@@ -25,7 +25,6 @@ void UPositionReport::BeginPlay()
 	FString ObjectPos = GetOwner()->GetTransform().GetLocation().ToString();//get the object`s current location
 	UE_LOG(LogTemp, Warning, TEXT("Position report reporting for %s! is at %s"), *ObjectName, *ObjectPos);
 
-	
 }
 
 
