@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "Grabber.generated.h"
 
-#define RAY_DISTANCE 50.f;
+#define RAY_DISTANCE 100.f;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UGrabber : public UActorComponent

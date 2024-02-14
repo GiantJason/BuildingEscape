@@ -3,6 +3,8 @@
 
 #include "Grabber.h"
 #include "DrawDebugHelpers.h"
+#include "Engine/World.h"
+#include "CollisionQueryParams.h"
 
 #define OUT
 
@@ -21,9 +23,7 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-
 	UE_LOG(LogTemp, Warning, TEXT("Grabber is reporting for duty!"));
-
 }
 
 
@@ -39,6 +39,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT PlayerViewPointLocation,
 		OUT PlayerViewPointRotation //macron OUT does nothing but remind us that changing variables here is not appropriate
 	);
+
 	// log out to test (tips: remember to de-reference the string)
 	//UE_LOG(LogTemp, Warning, TEXT("Location: %s, Rotation: %s"), 
 	//	*PlayerViewPointLocation.ToString(), 
@@ -55,8 +56,22 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		false, 0.f, 0.f, 10.f
 	);
 	// ray-cast out to reach distance
+	FHitResult Hit;
+	// set up parameters
+	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT Hit,
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParams
+	);
 
-	// find out the object we`ve chosen
-
+	// find out the object we`ve hit
+	AActor* ActorHit = Hit.GetActor();
+	if (ActorHit) {
+		FString ActorName = ActorHit->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("The actor hit is: %s"), *ActorName);
+	}
 }
 
