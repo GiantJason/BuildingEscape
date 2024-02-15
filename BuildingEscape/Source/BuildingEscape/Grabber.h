@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Components/InputComponent.h"
 #include "Grabber.generated.h"
 
 #define RAY_DISTANCE 100.f;
@@ -30,4 +31,7 @@ private:
 	float RayDistance = RAY_DISTANCE; // the distance of player view can really reach
 
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
+	// InputComponent only appears at run time
+	UInputComponent* InputComponent = nullptr;
 };
