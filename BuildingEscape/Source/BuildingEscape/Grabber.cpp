@@ -35,8 +35,21 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	GetFirstPhysicsBodyInReach();
+	// get player view point every tick
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation //macron OUT does nothing but remind us that changing variables here is not appropriate
+	);
 
+	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * RayDistance;
+
+	/// if physics handle is attached
+	if (PhysicsHandle->GrabbedComponent) {
+		// move the object we are holding 
+		PhysicsHandle->SetTargetLocation(LineTraceEnd);
+	}
 }
 
 void UGrabber::FindPhysicsHandleComponent()
@@ -122,16 +135,28 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 
 void UGrabber::Grab()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Grab key pressed!"));
+	UE_LOG(LogTemp, Warning, TEXT("Grab key pressed!"));
 
-	// line trace and see if we reach any actors with physics collision body set 
+	/// line trace and see if we reach any actors with physics collision body set 
+	auto HitResult = GetFirstPhysicsBodyInReach();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto ActorHit = HitResult.GetActor();
 
+	if (ActorHit) {
+		/// if we hit sth, attach it with physics handle
+		PhysicsHandle->GrabComponentAtLocationWithRotation(
+			ComponentToGrab,
+			NAME_None,
+			ComponentToGrab->GetOwner()->GetActorLocation(),
+			FRotator::ZeroRotator);
+	}
 }
 
 void UGrabber::Release()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab key released!"));
+
+	// release the object we are holding
+	PhysicsHandle->ReleaseComponent();
 }
-
-
 
