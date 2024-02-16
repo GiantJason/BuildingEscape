@@ -10,6 +10,7 @@
 #include "Grabber.generated.h"
 
 #define RAY_DISTANCE 100.f;
+#define OUT
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UGrabber : public UActorComponent
@@ -51,4 +52,11 @@ private:
 
 	//called when grab key is released
 	void Release();
+
+	// get the player`s reach line
+	FVector GetReachLine(enum class LineBothEnds);
+};
+
+enum class LineBothEnds {
+	START, END
 };
