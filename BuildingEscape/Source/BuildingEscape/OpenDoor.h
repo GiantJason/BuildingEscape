@@ -47,4 +47,7 @@ private:
 	float DoorLastOpen;
 
 	AActor* DoorOwner;//the component owner door
+
+	// returns the mass on the plate
+	float GeTotalMassOfActorsOnPlate();
 };

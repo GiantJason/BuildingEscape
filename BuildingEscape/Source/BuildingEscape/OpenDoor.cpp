@@ -3,6 +3,9 @@
 
 #include "OpenDoor.h"
 
+#define OPENLIMIT 50.f
+#define OUT
+
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
 {
@@ -54,9 +57,8 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	//poll the trigger volume every frame
-	//if the actor that opens is in the volume, then open the door
-	if (PressurePlate->IsOverlappingActor(ActorOpens)) {
+	//poll the trigger volume every frame and count the mass on it to open the door
+	if (GeTotalMassOfActorsOnPlate() > OPENLIMIT) {
 		OpenDoor();
 
 		DoorLastOpen = GetWorld()->GetRealTimeSeconds();//get the real time when the door is closed
@@ -67,5 +69,19 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		CloseDoor();
 	}
 
+}
+
+float UOpenDoor::GeTotalMassOfActorsOnPlate()
+{
+	float TotalMass = 0.f;
+	// find all the overlapping actors
+	TArray<AActor*> OverlappingActors;
+	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
+	// iterate through the actos and sum their mass
+	for (const auto* Actor : OverlappingActors) {
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		UE_LOG(LogTemp, Warning, TEXT("%f kg on the pressure plate."), TotalMass);
+	}
+	return TotalMass;
 }
 
