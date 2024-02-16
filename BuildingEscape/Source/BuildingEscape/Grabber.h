@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Components/InputComponent.h"
+
 #include "Grabber.generated.h"
 
 #define RAY_DISTANCE 100.f;
@@ -28,10 +29,26 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	float RayDistance = RAY_DISTANCE; // the distance of player view can really reach
+	// the distance of player view can really reach
+	float RayDistance = RAY_DISTANCE; 
 
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
+	// find (assumed) attached physics handle component
+	void FindPhysicsHandleComponent(); 
+
 	// InputComponent only appears at run time
 	UInputComponent* InputComponent = nullptr;
+
+	// setup (assumed) attached input component
+	void SetupInputComponent();
+
+	//Return hit for first physics body in reach
+	const FHitResult GetFirstPhysicsBodyInReach();
+
+	// grab an object
+	void Grab();
+
+	//called when grab key is released
+	void Release();
 };
