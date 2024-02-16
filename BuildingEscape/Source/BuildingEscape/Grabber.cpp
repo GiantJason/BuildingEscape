@@ -29,6 +29,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if (!PhysicsHandle) { return; }
+	UE_LOG(LogTemp, Warning, TEXT("haha"));
 	/// if physics handle is attached
 	if (PhysicsHandle->GrabbedComponent) {
 		// move the object we are holding 
@@ -38,7 +40,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 void UGrabber::FindPhysicsHandleComponent()
 {
-	/// look for attached physics handle & InputComponent
+	/// look for attached physics handle
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (PhysicsHandle == nullptr) {
 		// log our an error of not finding physics handle
@@ -52,6 +54,7 @@ void UGrabber::SetupInputComponent()
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
 
 	if (InputComponent) {
+		if (!InputComponent) { return; }
 		// bind the input
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
@@ -92,6 +95,7 @@ void UGrabber::Grab()
 	auto ActorHit = HitResult.GetActor();
 
 	if (ActorHit) {
+		if (!PhysicsHandle) { return; }
 		/// if we hit sth, attach it with physics handle
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			ComponentToGrab,
