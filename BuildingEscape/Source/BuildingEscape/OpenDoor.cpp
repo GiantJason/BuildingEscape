@@ -30,23 +30,13 @@ void UOpenDoor::BeginPlay()
 //open door function
 void UOpenDoor::OpenDoor()
 {
-
-	//create the rotator
-	FRotator DoorROotation = FRotator(0.0f, OpenAngle, 0.0f);
-
-	//set the door rotation
-	GetOwner()->SetActorRotation(DoorROotation);
+	GetOwner()->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
 }
 
 //open door function
 void UOpenDoor::CloseDoor()
 {
-
-	//create the rotator
-	FRotator DoorROotation = FRotator(0.0f, 0.0f, 0.0f);
-
-	//set the door rotation
-	GetOwner()->SetActorRotation(DoorROotation);
+	GetOwner()->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
 }
 
 // Called every frame

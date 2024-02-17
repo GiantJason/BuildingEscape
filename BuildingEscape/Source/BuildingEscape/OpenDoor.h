@@ -9,6 +9,8 @@
 #include "OpenDoor.generated.h"
 
 
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BUILDINGESCAPE_API UOpenDoor : public UActorComponent
 {
@@ -18,17 +20,19 @@ public:
 	// Sets default values for this component's properties
 	UOpenDoor();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void OpenDoor();
 
 	void CloseDoor();
 
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	//UPROPERTY(BluePrintAssignable)
+	//FOnOpenRequest OnOpenRequest;
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
 
 private:
 
@@ -43,6 +47,6 @@ private:
 
 	float DoorLastOpen;
 
-	// returns the mass on the plate
+	// returns the  mass on the plate
 	float GeTotalMassOfActorsOnPlate();
 };
